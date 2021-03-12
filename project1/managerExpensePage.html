@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Expense Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <link rel="stylesheet" href="managerStyle.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500&display=swap" rel="stylesheet">
+
+</head>
+<body style="background-color:bisque;opacity: 0.85">
+
+    <div class="grid-container">
+        <div class="managerheaders">
+            <br>
+            <br>
+            <h1 style="font-family: 'Noto Serif TC', serif;">Manager (Michael) Expense Handling Page</h1>
+            <h2 style="font-family: 'Noto Serif TC', serif;">Handle all Employee Expenses</h2>
+        
+        </div>
+        <div class="managerexpenses">
+            <table id="expensesTable" style="font-family: 'Noto Serif TC', serif;" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+                <thead><th>Employee ID</th><th>Description</th><th>Amount</th><th>Date Submitted</th><th>Status</th><th>Date Approved/Denied</th><th>Reason Approved/Denied</th></thead>
+               
+                <tbody id="expenseTableBody">
+        
+                </tbody>
+            </table>
+        </div>
+        <div class="managerAdd">
+            
+            <br>
+            <h2 style="font-family: 'Noto Serif TC', serif;">Add a new Expense</h2>
+            <br>
+    <label  style="font-family: 'Noto Serif TC', serif;" class="table table-striped table-bordered table-sm" for="employeeInput">Employee ID</label>
+    <input class="input-group-prepend" placeholder="i.e. 1,2,3" id="employeeInput" type="number">
+    <br>
+    <br>
+
+    <label  style="font-family: 'Noto Serif TC', serif;" class="table table-striped table-bordered table-sm" for="expenseInput">Description</label>
+    <input class="input-group-prepend" placeholder="i.e. Hotel, Gas" id="expenseInput" type="text">
+    <br>
+    <br>
+
+    
+
+    <label  style="font-family: 'Noto Serif TC', serif;" class="table table-striped table-bordered table-sm" for="amountInput">Amount</label>
+    <input class="input-group-prepend" placeholder="i.e. 100.00" id="amountInput" type="text">
+    <br>
+    <br>
+
+    <button class="btn btn-primary" onclick="submitExpense()">Submit Expense</button> 
+    <br>
+    <br>
+   
+    <br>
+        </div>
+        <div class="michaelPic">
+            <label  style="font-family: 'Noto Serif TC', serif;" class="table table-striped table-bordered table-sm" for="statusInput">Reason Approved/Denied</label>
+            <input  class="input-group-prepend" placeholder="i.e. Covered/Not Covered" id="statusInput" type="text">
+           <br>
+           <br>
+            <img src="michael.jpg" class="img-thumbnail" class="rounded" alt="dwight" height="400px" width="600px">
+        </div>
+            
+            
+            <div class="officeEntry"><img src="dundermiflin.png" class="img-thumbnail" class="rounded" alt="dwight" height="225px" width="325px">
+            </div>
+            <div class="dunderPic"><img src="officeentry.png" class="img-thumbnail" class="rounded" alt="dwight" height="250px" width="350px">
+            </div>
+      </div>
+   
+   
+
+    
+    
+
+    <!-- <button onclick="getAllExpenses()">Get All Expenses</button> -->
+    <!-- <button onclick="approvesExpense()">Approve Expense</button>
+    <button onclick="denyExpense()">Deny Expense</button>
+    <button onclick="addStatusReason()">Add Reason</button> --> 
+
+</body>
+
+<script>
+
+    const expenseTableBody = document.getElementById("expenseTableBody");
+    const employeeInput = document.getElementById("employeeInput");
+    const expenseInput = document.getElementById("expenseInput");
+    const amountInput = document.getElementById("amountInput");
+    const statusInput = document.getElementById("statusInput");
+   
+    getAllExpenses();
+
+    async function getAllExpenses(){
+        const httpResponse = await fetch("http://localhost:7000/expenses"); // defaults to get
+        const expenses = await httpResponse.json();// automatically parses the text into an object
+        let tbodyHtml = ``;
+
+        for(const expense of expenses){
+
+            const utcSeconds = expense.dateSubmitted
+            const utcSeconds1 = expense.dateApproved
+            let d = new Date(0)
+            d.setUTCSeconds(utcSeconds)
+            let d1 = new Date(0)
+            if(utcSeconds1 == 0){
+                d1.setUTCSeconds()
+            }else{
+                
+                d1.setUTCSeconds(utcSeconds1)
+        
+            }
+            
+            
+            tbodyHtml +=   `
+            <tr>
+            <td> ${expense.employeeId}</td>
+            <td> ${expense.reason}</td>
+            <td> $${expense.amount.toFixed(2)}</td>
+            <td>${d.toLocaleDateString("en-US")}</td>
+            <td> ${expense.status}</td>
+            <td> ${d1.toLocaleDateString("en-US")}</td>
+            <td> ${expense.statusReason}</td>
+            <td> <button type="button" class="btn btn-outline-success" onclick="approveExpense(${expense.employeeId},${expense.expenseId})">Approve Expense</button>
+            <td> <button type="button" class="btn btn-outline-danger"" onclick="denyExpense(${expense.employeeId},${expense.expenseId})">Deny Expense</button>
+            <td> <button type="button" class="btn btn-light" onclick="addStatusReason(${expense.employeeId},${expense.expenseId})">Add Reason</button>
+
+            </tr>
+            `
+        }
+        expenseTableBody.innerHTML = tbodyHtml;
+    }
+
+    async function submitExpense(){
+
+        const expense = {
+            expenseId:0,
+            employeeId:employeeInput.value,
+            amount: amountInput.value,
+            reason: expenseInput.value,
+            dateSubmitted: 0,
+            dateApproved:0,
+            statusReason: "None"
+        }
+
+        const details ={
+        method:"POST",
+        body: JSON.stringify(expense)// JSON to send goes here
+        }
+
+        const httpResponse = await fetch(`http://localhost:7000/employees/${expense.employeeId}/expenses`,details);
+
+        if(httpResponse.status === 201){
+            alert("Your Expense was saved correctly")
+            getAllExpenses()// refresh my table if I successfully add a book
+        }else{
+            alert("Expense was not saved successfully, try again")
+        }
+
+    }
+
+    async function approveExpense(eId = 0,exId = 0){
+        
+        const jwt = localStorage.getItem('jwt')
+        const details = {
+            method:"PUT",
+            headers:{
+                "Authorization": jwt
+            }
+        }
+
+        const httpResponse = await fetch(`http://localhost:7000/employees/${eId}/expenses/${exId}/approve`,details)
+        alert("Expense was successfully approved.")
+        getAllExpenses();
+
+    }
+    async function denyExpense(eId = 0,exId = 0){
+        
+        const jwt = localStorage.getItem('jwt')
+        const details = {
+            method:"PUT",
+            headers:{
+                "Authorization": jwt
+            }
+        }
+
+        const httpResponse = await fetch(`http://localhost:7000/employees/${eId}/expenses/${exId}/deny`,details)
+        alert("Expense was successfully denied.")
+        getAllExpenses();
+
+    }
+    async function addStatusReason(eId = 0,exId = 0){
+
+        const httpResponse = await fetch(`http://localhost:7000/employees/${eId}/expenses/${exId}`); // defaults to get
+        const expenses = await httpResponse.json();
+        expenseId = expenses.expenseId
+        employeeId = expenses.employeeId
+        amount = expenses.amount
+        reason = expenses.reason
+        dateSubmitted = expenses.dateSubmitted
+        dateApproved = expenses.dateApproved
+
+
+        const expense = {
+            expenseId,
+            employeeId,
+            amount,
+            reason,
+            dateSubmitted,
+            dateApproved,
+            statusReason: statusInput.value
+        }
+
+        const details ={
+            method:"PUT",
+            body: JSON.stringify(expense)// JSON to send goes here
+        }
+
+        const httpResponse1 = await fetch(`http://localhost:7000/employees/${expense.employeeId}/expenses/${expense.expenseId}`,details);
+        alert("Reason was successfully added.")
+        getAllExpenses();
+    }
+
+   
+    
+
+</script>
+
+</html>

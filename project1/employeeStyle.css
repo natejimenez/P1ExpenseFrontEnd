@@ -1,0 +1,14 @@
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 0.5fr 1.5fr 1fr;
+  grid-template-rows: 1.1fr 0.9fr 1fr;
+  gap: 0px 0px;
+  grid-template-areas:
+    "employeePic employeePic employeeHeaders employeeHeaders"
+    "addExpense addExpense employeeExpenses employeeExpenses"
+    "addExpense addExpense employeeExpenses employeeExpenses";
+}
+.employeeHeaders { grid-area: employeeHeaders; text-align: center; }
+.employeePic { grid-area: employeePic; text-align: center;}
+.employeeExpenses { grid-area: employeeExpenses; text-align: center;}
+.addExpense { grid-area: addExpense; text-align: center;}

@@ -1,0 +1,16 @@
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 0.5fr 1.2fr 1.3fr;
+    gap: 0px 0px;
+    grid-template-areas:
+    "officeEntry managerheaders managerheaders dunderPic"
+      "managerexpenses managerexpenses managerexpenses managerexpenses"
+      "managerAdd managerAdd michaelPic michaelPic";
+  }
+  .managerheaders { grid-area: managerheaders; text-align: center; }
+  .managerexpenses { grid-area: managerexpenses; text-align: center; }
+  .managerAdd { grid-area: managerAdd; text-align: center;}
+  .michaelPic { grid-area: michaelPic; text-align: center;}
+  .officeEntry { grid-area: officeEntry; text-align: right;}
+  .dunderPic { grid-area: dunderPic;text-align: left; }

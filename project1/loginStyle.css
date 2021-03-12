@@ -1,0 +1,16 @@
+.grid-container {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr 0.8fr 1.2fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  gap: 0px 0px;
+  grid-template-areas:
+    ". loginheaders loginheaders ."
+    "michaelpic credentials credentials dwightpic"
+    ". . . .";
+}
+.dwightpic { grid-area: dwightpic; text-align: left;}
+.michaelpic { grid-area: michaelpic; text-align: right; }
+.loginheaders { grid-area: loginheaders; text-align: center;}
+.credentials { grid-area: credentials; text-align: center;}
+
+

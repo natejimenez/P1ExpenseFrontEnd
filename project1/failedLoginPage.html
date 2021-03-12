@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Failed Login</title>
+    <link rel="stylesheet" href="failedLoginStyle.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500&display=swap" rel="stylesheet">
+
+</head>
+<body style="background-color:bisque;opacity: 0.85">
+    <div class="grid-container">
+        <div class="failedLoginHeaders">
+            <br>
+            <br>
+            <br>
+        
+            <h2 style="font-family: 'Noto Serif TC', serif;">You failed your own login. Boom roasted.</h2>
+        </div>
+        <div class="failPic">
+            <button class="btn btn-link" onclick="backLogin()">Back to Login</button> 
+            <br>
+            <img src="kevinbeans.gif" class="rounded" alt="dwight" height="500px" width="500px">
+            <br>
+
+        </div>
+      </div>
+    
+</body>
+<script>
+    function backLogin(){
+        window.location.href= "./loginPage.html"
+    }
+</script>
+</html>
